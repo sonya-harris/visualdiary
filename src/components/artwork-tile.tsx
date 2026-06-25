@@ -15,23 +15,26 @@ export function ArtworkTile({ artwork }: { artwork: Artwork }) {
 
   return (
     <div className="group">
-      <Link
-        to="/projects/$slug"
-        params={{ slug: artwork.slug }}
-        className="relative block aspect-square overflow-hidden bg-secondary"
-      >
-        {images.map((src, i) => (
-          <img
-            key={src}
-            src={src}
-            alt={artwork.title}
-            width={1024}
-            height={1024}
-            loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-out"
-            style={{ opacity: i === index ? 1 : 0 }}
-          />
-        ))}
+      <div className="relative aspect-square overflow-hidden bg-secondary">
+        <Link
+          to="/projects/$slug"
+          params={{ slug: artwork.slug }}
+          className="absolute inset-0 block"
+          aria-label={artwork.title}
+        >
+          {images.map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt={artwork.title}
+              width={1024}
+              height={1024}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-out"
+              style={{ opacity: i === index ? 1 : 0 }}
+            />
+          ))}
+        </Link>
 
         {hasMultiple && (
           <>
@@ -39,7 +42,7 @@ export function ArtworkTile({ artwork }: { artwork: Artwork }) {
               type="button"
               onClick={(e) => go(e, -1)}
               aria-label="Previous image"
-              className="absolute left-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center text-foreground/50 transition-colors hover:text-foreground sm:left-3"
+              className="absolute left-2 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center text-foreground/50 transition-colors hover:text-foreground sm:left-3"
             >
               <Chevron dir="left" />
             </button>
@@ -47,13 +50,14 @@ export function ArtworkTile({ artwork }: { artwork: Artwork }) {
               type="button"
               onClick={(e) => go(e, 1)}
               aria-label="Next image"
-              className="absolute right-2 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center text-foreground/50 transition-colors hover:text-foreground sm:right-3"
+              className="absolute right-2 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center text-foreground/50 transition-colors hover:text-foreground sm:right-3"
             >
               <Chevron dir="right" />
             </button>
           </>
         )}
-      </Link>
+      </div>
+
 
       <div className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <Link
