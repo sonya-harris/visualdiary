@@ -58,18 +58,19 @@ function ProjectPage() {
               {artwork.title}
             </h1>
             <p className="mt-3 inline-block text-xs tracking-wide text-muted-foreground">
-              {artwork.category}
+              {artwork.category || "Category TBC"}
             </p>
 
             <dl className="mt-8 space-y-1.5 text-sm text-foreground">
-              <div>{artwork.dimensions}</div>
-              <div>{artwork.medium}</div>
-              <div>{artwork.year}</div>
+              <div>{artwork.dimensions || "Dimensions TBC"}</div>
+              <div>{artwork.medium || "Medium TBC"}</div>
+              <div>{artwork.year || "Year TBC"}</div>
             </dl>
 
             <p className="mt-8 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {artwork.description}
+              {artwork.description || "Description coming soon."}
             </p>
+
 
             <Link
               to="/"
