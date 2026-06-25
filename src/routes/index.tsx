@@ -10,12 +10,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Selected works by Sonya Harris. A contemporary visual diary of painting, sculpture, drawing and photography.",
+          "Welcome.",
       },
       { property: "og:title", content: "Sonya Harris — Visual Diary" },
       {
         property: "og:description",
-        content: "Selected works by Sonya Harris.",
+        content: "Welcome.",
       },
     ],
   }),
@@ -31,7 +31,7 @@ function Index() {
             Visual Diary
           </h1>
           <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-            Selected works by Sonya Harris.
+            Welcome.
           </p>
         </div>
       </section>
