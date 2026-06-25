@@ -54,7 +54,7 @@ function ProjectPage() {
         <div className="mx-auto grid max-w-[1400px] gap-12 pt-4 md:grid-cols-[280px_minmax(0,1fr)] md:gap-16 lg:grid-cols-[320px_minmax(0,1fr)]">
           {/* Meta column */}
           <aside className="md:sticky md:top-10 md:self-start">
-            <h1 className="text-[32px] font-bold leading-tight tracking-tight sm:text-[40px]">
+            <h1 className="font-display text-[36px] font-bold leading-[0.95] tracking-tight sm:text-[48px]">
               {artwork.title}
             </h1>
             <p className="mt-3 inline-block text-xs tracking-wide text-muted-foreground">
