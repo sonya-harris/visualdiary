@@ -51,7 +51,7 @@ function ProjectPage() {
   return (
     <SiteLayout>
       <article className="px-6 sm:px-10">
-        <div className="mx-auto grid max-w-[1400px] gap-12 pt-4 md:grid-cols-[280px_minmax(0,1fr)] md:gap-16 lg:grid-cols-[320px_minmax(0,1fr)]">
+        <div className="mx-auto grid max-w-[1400px] gap-12 pt-8 sm:pt-12 md:grid-cols-[280px_minmax(0,1fr)] md:gap-16 lg:grid-cols-[320px_minmax(0,1fr)]">
           {/* Meta column */}
           <aside className="md:sticky md:top-10 md:self-start">
             <h1 className="font-display text-[36px] font-bold leading-[0.95] tracking-tight sm:text-[48px]">
