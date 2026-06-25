@@ -45,7 +45,7 @@ export const Route = createFileRoute("/projects/$slug")({
 });
 
 function ProjectPage() {
-  const { artwork, related } = Route.useLoaderData();
+  const { artwork } = Route.useLoaderData();
   const [lightbox, setLightbox] = useState<string | null>(null);
 
   return (
