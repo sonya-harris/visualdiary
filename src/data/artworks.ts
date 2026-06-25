@@ -1,13 +1,13 @@
-import inFluxA from "@/assets/in-flux-a.png.asset.json";
-import inFluxB from "@/assets/in-flux-b.jpg.asset.json";
-import abbeyRoad from "@/assets/abbey-road.jpg.asset.json";
-import bougainvillia from "@/assets/bougainvillia.jpg.asset.json";
-import boxes from "@/assets/boxes.jpg.asset.json";
-import brownSnake from "@/assets/brown-snake.jpg.asset.json";
-import calendar from "@/assets/calendar.jpg.asset.json";
-import champsElysees from "@/assets/champs-elysees.jpg.asset.json";
-import conch from "@/assets/conch.jpg.asset.json";
-import crown from "@/assets/crown.jpg.asset.json";
+const assetModules = Object.fromEntries(
+  Object.entries(
+    import.meta.glob("/src/assets/*", {
+      eager: true,
+      import: "default",
+    }) as Record<string, string>,
+  ).filter(([assetPath]) => /\.(jpe?g|png|webp|svg)$/i.test(assetPath)),
+) as Record<string, string>;
+
+// The logo is imported separately in the layout component and is not part of the artwork list.
 
 export type Artwork = {
   slug: string;
@@ -17,111 +17,190 @@ export type Artwork = {
   year: number | string;
   dimensions: string;
   description: string;
+  tags: string[];
   featuredImage: string;
   gallery: string[];
 };
 
-export const artworks: Artwork[] = [
+function createArtwork(
+  props: Partial<Artwork> & Pick<Artwork, "slug" | "title" | "featuredImage">,
+): Artwork {
+  return {
+    medium: "",
+    category: "",
+    year: "",
+    dimensions: "",
+    description: "",
+    tags: [],
+    gallery: [props.featuredImage],
+    ...props,
+  };
+}
+
+function toArtworkTitle(assetPath: string) {
+  const fileName = assetPath.split("/").pop() ?? assetPath;
+  return fileName.replace(/\.[^/.]+$/, "").replace(/[_-]+/g, " ").trim();
+}
+
+function toSlug(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function normalizeAssetName(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/\.[^/.]+$/, "")
+    .replace(/\s+\((copy|duplicate|1|2|3)\)$/i, "")
+    .replace(/\s+copy$/i, "")
+    .replace(/[-_]+/g, " ");
+}
+
+function resolveAsset(...assetNames: string[]) {
+  const assetLookup = Object.fromEntries(
+    Object.entries(assetModules).map(([assetPath, assetUrl]) => {
+      const fileName = assetPath.split("/").pop() ?? "";
+      return [fileName.toLowerCase(), assetUrl];
+    }),
+  );
+
+  const fallbackLookup = new Map<string, string>();
+  for (const [fileName, assetUrl] of Object.entries(assetLookup)) {
+    fallbackLookup.set(normalizeAssetName(fileName), assetUrl);
+  }
+
+  for (const assetName of assetNames) {
+    const normalizedName = assetName.toLowerCase();
+    const resolved = assetLookup[normalizedName];
+    if (resolved) {
+      return resolved;
+    }
+
+    const fallback = fallbackLookup.get(normalizeAssetName(assetName));
+    if (fallback) {
+      return fallback;
+    }
+  }
+
+  throw new Error(`Could not resolve asset for ${assetNames.join(", ")}`);
+}
+
+const mediumBySlug: Record<string, { medium: string; tags: string[] }> = {
+  "in-flux": { medium: "Stoneware clay", tags: ["Stoneware clay"] },
+  depth: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  "the-grand-budapest-hotel": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  "sezane-cups": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  "champs-elysees": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  embrace: { medium: "Photogram", tags: ["Photogram"] },
+  crown: { medium: "Photogram", tags: ["Photogram"] },
+  "brown-snake": { medium: "Cyanotype", tags: ["Cyanotype"] },
+  sheer: { medium: "Cyanotype", tags: ["Cyanotype"] },
+  bougainvillia: { medium: "Cyanotype", tags: ["Cyanotype"] },
+  "bougainvillea": { medium: "Cyanotype", tags: ["Cyanotype"] },
+  "limoges-porcelain": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  jigsaw: {
+    medium: "Watercolour paint / Colour pencil / Graphite pencil / Fineliner",
+    tags: ["Watercolour paint", "Colour pencil", "Graphite pencil", "Fineliner"],
+  },
+  conch: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  "abbey-road": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  boxes: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  harleycat: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  "fka-twigs": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  "egoic-lotus": { medium: "Colour pencil", tags: ["Colour pencil"] },
+  calendar: { medium: "Colour pencil", tags: ["Colour pencil"] },
+  serotonin: { medium: "Colour pencil", tags: ["Colour pencil"] },
+  "sunflower-theory": { medium: "Colour pencil", tags: ["Colour pencil"] },
+  lineage: { medium: "Colour pencil", tags: ["Colour pencil"] },
+};
+
+function getArtworkMeta(slug: string) {
+  return mediumBySlug[slug] ?? { medium: "", tags: [] };
+}
+
+const groupedArtworkConfigs = [
+  {
+    slug: "bougainvillea",
+    title: "Bougainvillea",
+    assets: ["Bougainvillia.jpg"],
+  },
   {
     slug: "in-flux",
     title: "In Flux",
-    medium: "",
-    category: "Sculpture",
-    year: "",
-    dimensions: "",
-    description: "",
-    featuredImage: inFluxA.url,
-    gallery: [inFluxA.url, inFluxB.url],
+    assets: ["In Flux A.PNG", "In Flux B.jpg"],
   },
   {
-    slug: "abbey-road",
-    title: "Abbey Road",
-    medium: "",
-    category: "",
-    year: "",
-    dimensions: "",
-    description: "",
-    featuredImage: abbeyRoad.url,
-    gallery: [abbeyRoad.url],
+    slug: "jigsaw",
+    title: "Jigsaw",
+    assets: [
+      "Jigsaw_Colour pencil.jpg",
+      "Jigsaw_Fineliner.jpg",
+      "Jigsaw_Graphite.jpg",
+      "Jigsaw_Outline.jpg",
+      "Jigsaw_Watercolour.jpg",
+    ],
   },
   {
-    slug: "bougainvillia",
-    title: "Bougainvillia",
-    medium: "",
-    category: "",
-    year: "",
-    dimensions: "",
-    description: "",
-    featuredImage: bougainvillia.url,
-    gallery: [bougainvillia.url],
-  },
-  {
-    slug: "boxes",
-    title: "Boxes",
-    medium: "",
-    category: "",
-    year: "",
-    dimensions: "",
-    description: "",
-    featuredImage: boxes.url,
-    gallery: [boxes.url],
-  },
-  {
-    slug: "brown-snake",
-    title: "Brown Snake",
-    medium: "",
-    category: "",
-    year: "",
-    dimensions: "",
-    description: "",
-    featuredImage: brownSnake.url,
-    gallery: [brownSnake.url],
-  },
-  {
-    slug: "calendar",
-    title: "Calendar",
-    medium: "",
-    category: "",
-    year: "",
-    dimensions: "",
-    description: "",
-    featuredImage: calendar.url,
-    gallery: [calendar.url],
-  },
-  {
-    slug: "champs-elysees",
-    title: "Champs-Élysées",
-    medium: "",
-    category: "",
-    year: "",
-    dimensions: "",
-    description: "",
-    featuredImage: champsElysees.url,
-    gallery: [champsElysees.url],
-  },
-  {
-    slug: "conch",
-    title: "Conch",
-    medium: "",
-    category: "",
-    year: "",
-    dimensions: "",
-    description: "",
-    featuredImage: conch.url,
-    gallery: [conch.url],
-  },
-  {
-    slug: "crown",
-    title: "Crown",
-    medium: "",
-    category: "",
-    year: "",
-    dimensions: "",
-    description: "",
-    featuredImage: crown.url,
-    gallery: [crown.url],
+    slug: "sunflower-theory",
+    title: "Sunflower Theory",
+    assets: ["Sunflower Theory.jpg"],
   },
 ];
+
+const singleArtworkConfigs = Object.keys(assetModules)
+  .filter((assetPath) => {
+    const fileName = (assetPath.split("/").pop() ?? "").toLowerCase();
+    return ![
+      "signature-logo.svg",
+      "signature-logo.png",
+      "sh.png",
+      "sh.PNG",
+      "sh-png",
+      "sh-png.png",
+    ].includes(fileName);
+  })
+  .map((assetPath) => ({
+    assetPath,
+    title: toArtworkTitle(assetPath),
+  }))
+  .filter(({ assetPath }) => {
+    return !groupedArtworkConfigs.some((config) =>
+      config.assets.some((assetName) => assetPath.endsWith(assetName)),
+    );
+  });
+
+// To add a new artwork, drop the image into src/assets and it will appear automatically.
+export const artworks: Artwork[] = [
+  ...groupedArtworkConfigs.map((config) => {
+    const images = config.assets.map((assetName) => resolveAsset(assetName));
+    const meta = getArtworkMeta(config.slug);
+    return createArtwork({
+      slug: config.slug,
+      title: config.title,
+      medium: meta.medium,
+      tags: meta.tags,
+      featuredImage: images[0],
+      gallery: images,
+    });
+  }),
+  ...singleArtworkConfigs.map(({ assetPath, title }) => {
+    const slug = toSlug(title);
+    const meta = getArtworkMeta(slug);
+    return createArtwork({
+      slug,
+      title,
+      medium: meta.medium,
+      tags: meta.tags,
+      featuredImage: assetModules[assetPath],
+      gallery: [assetModules[assetPath]],
+    });
+  }),
+].sort((a, b) => a.title.localeCompare(b.title));
 
 export const getArtwork = (slug: string) =>
   artworks.find((a) => a.slug === slug);

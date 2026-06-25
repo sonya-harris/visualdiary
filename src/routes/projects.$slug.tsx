@@ -50,31 +50,35 @@ function ProjectPage() {
 
   return (
     <SiteLayout>
-      <article className="px-6 sm:px-10">
-        <div className="mx-auto grid max-w-[1400px] gap-12 pt-8 sm:pt-12 md:grid-cols-[280px_minmax(0,1fr)] md:gap-16 lg:grid-cols-[320px_minmax(0,1fr)]">
+      <article className="px-4 sm:px-6 lg:px-7">
+        <div className="mx-auto grid max-w-[1400px] gap-12 pt-6 sm:pt-8 md:grid-cols-[280px_minmax(0,1fr)] md:gap-16 lg:grid-cols-[320px_minmax(0,1fr)]">
           {/* Meta column */}
           <aside className="md:sticky md:top-10 md:self-start">
-            <h1 className="font-display text-[36px] font-bold leading-[0.95] tracking-tight sm:text-[48px]">
+            <h1 className="font-display text-[28px] font-bold leading-[1] tracking-[-0.055em] text-black sm:text-[30px]">
               {artwork.title}
             </h1>
-            <p className="mt-3 inline-block text-xs tracking-wide text-muted-foreground">
-              {artwork.category || "Category TBC"}
-            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2">
+              {artwork.category ? (
+                <p className="inline-block rounded-full border border-[#ececec] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.02em] text-[#777777]">
+                  {artwork.category}
+                </p>
+              ) : null}
+              {artwork.medium || artwork.tags?.length ? (
+                <span className="text-[10px] font-normal leading-[1.2] text-[#777777]">
+                  {artwork.medium || artwork.tags?.join(", ")}
+                </span>
+              ) : null}
+            </div>
 
-            <dl className="mt-8 space-y-1.5 text-sm text-foreground">
-              <div>{artwork.dimensions || "Dimensions TBC"}</div>
-              <div>{artwork.medium || "Medium TBC"}</div>
-              <div>{artwork.year || "Year TBC"}</div>
-            </dl>
-
-            <p className="mt-8 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {artwork.description || "Description coming soon."}
-            </p>
-
+            {artwork.description ? (
+              <p className="mt-8 max-w-sm text-[13px] font-bold leading-[1.1] text-black sm:text-[14px]">
+                {artwork.description}
+              </p>
+            ) : null}
 
             <Link
               to="/"
-              className="mt-10 inline-flex items-center gap-2 text-sm text-foreground transition-colors hover:text-muted-foreground"
+              className="mt-10 inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.02em] text-black transition-colors hover:text-[#777777]"
             >
               <span aria-hidden>←</span> Back
             </Link>

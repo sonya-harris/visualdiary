@@ -1,11 +1,19 @@
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import type { Artwork } from "@/data/artworks";
 
 export function ArtworkTile({ artwork }: { artwork: Artwork }) {
+  const navigate = useNavigate();
   const [index, setIndex] = useState(0);
-  const images = artwork.gallery;
+  const images = [
+    artwork.featuredImage,
+    ...artwork.gallery.filter((src) => src !== artwork.featuredImage),
+  ];
   const hasMultiple = images.length > 1;
+
+  const openArtwork = () => {
+    navigate({ to: "/projects/$slug", params: { slug: artwork.slug } });
+  };
 
   const go = (e: React.MouseEvent, dir: number) => {
     e.preventDefault();
@@ -14,14 +22,20 @@ export function ArtworkTile({ artwork }: { artwork: Artwork }) {
   };
 
   return (
-    <div className="group">
+    <div
+      className="group cursor-pointer"
+      onClick={openArtwork}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openArtwork();
+        }
+      }}
+    >
       <div className="relative aspect-square overflow-hidden bg-secondary">
-        <Link
-          to="/projects/$slug"
-          params={{ slug: artwork.slug }}
-          className="absolute inset-0 block"
-          aria-label={artwork.title}
-        >
+        <div className="absolute inset-0">
           {images.map((src, i) => (
             <img
               key={src}
@@ -34,7 +48,7 @@ export function ArtworkTile({ artwork }: { artwork: Artwork }) {
               style={{ opacity: i === index ? 1 : 0 }}
             />
           ))}
-        </Link>
+        </div>
 
         {hasMultiple && (
           <>
@@ -42,7 +56,7 @@ export function ArtworkTile({ artwork }: { artwork: Artwork }) {
               type="button"
               onClick={(e) => go(e, -1)}
               aria-label="Previous image"
-              className="absolute left-2 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center text-foreground/50 transition-colors hover:text-foreground sm:left-3"
+              className="absolute left-2 top-1/2 z-20 grid h-8 w-8 -translate-y-1/2 place-items-center bg-transparent text-[#777777] transition-colors hover:text-black sm:left-3"
             >
               <Chevron dir="left" />
             </button>
@@ -50,7 +64,7 @@ export function ArtworkTile({ artwork }: { artwork: Artwork }) {
               type="button"
               onClick={(e) => go(e, 1)}
               aria-label="Next image"
-              className="absolute right-2 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center text-foreground/50 transition-colors hover:text-foreground sm:right-3"
+              className="absolute right-2 top-1/2 z-20 grid h-8 w-8 -translate-y-1/2 place-items-center bg-transparent text-[#777777] transition-colors hover:text-black sm:right-3"
             >
               <Chevron dir="right" />
             </button>
@@ -58,17 +72,12 @@ export function ArtworkTile({ artwork }: { artwork: Artwork }) {
         )}
       </div>
 
-
       <div className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <Link
-          to="/projects/$slug"
-          params={{ slug: artwork.slug }}
-          className="font-display text-[17px] font-bold tracking-tight text-foreground transition-colors hover:text-muted-foreground"
-        >
+        <div className="font-display text-[11px] font-bold leading-[1.1] tracking-[0.01em] text-black transition-colors group-hover:text-[#777777]">
           {artwork.title}
-        </Link>
-        <span className="text-xs tracking-wide text-muted-foreground">
-          {artwork.category}
+        </div>
+        <span className="text-[10px] font-normal leading-[1.2] text-[#777777]">
+          {artwork.medium || artwork.category}
         </span>
       </div>
     </div>
