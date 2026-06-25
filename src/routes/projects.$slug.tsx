@@ -85,7 +85,7 @@ function ProjectPage() {
 
           {/* Gallery */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-            {artwork.gallery.map((src) => (
+            {artwork.gallery.map((src: string) => (
               <button
                 key={src}
                 type="button"
@@ -112,7 +112,7 @@ function ProjectPage() {
               Related
             </h2>
             <div className="grid grid-cols-2 gap-x-4 gap-y-12 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-16">
-              {related.map((a) => (
+              {related.map((a: typeof related[number]) => (
                 <ArtworkTile key={a.slug} artwork={a} />
               ))}
             </div>
