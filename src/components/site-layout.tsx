@@ -2,17 +2,23 @@ import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import logoAsset from "@/assets/signature-logo.asset.json";
 
-export function SiteLayout({ children }: { children: ReactNode }) {
+export function SiteLayout({
+  children,
+  showAboutLink = true,
+}: {
+  children: ReactNode;
+  showAboutLink?: boolean;
+}) {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Header />
+      <Header showAboutLink={showAboutLink} />
       <main className="fade-in">{children}</main>
       <Footer />
     </div>
   );
 }
 
-function Header() {
+function Header({ showAboutLink }: { showAboutLink: boolean }) {
   return (
     <header className="px-6 pt-8 pb-2 sm:px-10 sm:pt-10">
       <div className="mx-auto flex max-w-[1600px] items-center justify-between">
@@ -20,18 +26,20 @@ function Header() {
           <img
             src={logoAsset.url}
             alt="Sonya Harris"
-            className="h-10 w-auto sm:h-12"
+            className="h-16 w-auto sm:h-20"
           />
         </Link>
-        <nav className="text-sm tracking-wide text-muted-foreground">
-          <Link
-            to="/about"
-            className="transition-colors hover:text-foreground"
-            activeProps={{ className: "text-foreground" }}
-          >
-            About
-          </Link>
-        </nav>
+        {showAboutLink && (
+          <nav className="font-display text-sm uppercase tracking-[0.18em] text-muted-foreground">
+            <Link
+              to="/"
+              hash="about"
+              className="transition-colors hover:text-foreground"
+            >
+              About
+            </Link>
+          </nav>
+        )}
       </div>
     </header>
   );

@@ -59,7 +59,7 @@ export function ArtworkTile({ artwork }: { artwork: Artwork }) {
         <Link
           to="/projects/$slug"
           params={{ slug: artwork.slug }}
-          className="text-[15px] font-semibold tracking-tight text-foreground transition-colors hover:text-muted-foreground"
+          className="font-display text-[17px] font-bold tracking-tight text-foreground transition-colors hover:text-muted-foreground"
         >
           {artwork.title}
         </Link>
