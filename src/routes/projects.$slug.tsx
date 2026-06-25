@@ -1,17 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteLayout } from "@/components/site-layout";
-import { ArtworkTile } from "@/components/artwork-tile";
-import { getArtwork, getRelated } from "@/data/artworks";
+import { getArtwork } from "@/data/artworks";
 
 export const Route = createFileRoute("/projects/$slug")({
   loader: ({ params }) => {
     const artwork = getArtwork(params.slug);
     if (!artwork) throw notFound();
-    return {
-      artwork,
-      related: getRelated(params.slug),
-    };
+    return { artwork };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
@@ -49,7 +45,7 @@ export const Route = createFileRoute("/projects/$slug")({
 });
 
 function ProjectPage() {
-  const { artwork, related } = Route.useLoaderData();
+  const { artwork } = Route.useLoaderData();
   const [lightbox, setLightbox] = useState<string | null>(null);
 
   return (
@@ -105,19 +101,6 @@ function ProjectPage() {
           </div>
         </div>
 
-        {/* Related */}
-        {related.length > 0 && (
-          <section className="mx-auto mt-32 max-w-[1600px]">
-            <h2 className="mb-8 text-xs tracking-[0.18em] text-muted-foreground uppercase">
-              Related
-            </h2>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-12 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-16">
-              {related.map((a: typeof related[number]) => (
-                <ArtworkTile key={a.slug} artwork={a} />
-              ))}
-            </div>
-          </section>
-        )}
       </article>
 
       {lightbox && (
