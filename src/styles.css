@@ -19,7 +19,6 @@
  */
 
 @theme inline {
-@theme inline {
   --font-sans: "Inter Tight", "Inter", system-ui, sans-serif;
   --font-display: "Inter Tight", "Inter", system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
