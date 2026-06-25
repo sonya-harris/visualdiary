@@ -1,17 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteLayout } from "@/components/site-layout";
-import { ArtworkTile } from "@/components/artwork-tile";
-import { getArtwork, getRelated } from "@/data/artworks";
+import { getArtwork } from "@/data/artworks";
 
 export const Route = createFileRoute("/projects/$slug")({
   loader: ({ params }) => {
     const artwork = getArtwork(params.slug);
     if (!artwork) throw notFound();
-    return {
-      artwork,
-      related: getRelated(params.slug),
-    };
+    return { artwork };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
