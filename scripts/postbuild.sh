@@ -39,14 +39,14 @@ cat > dist/index.html <<EOF
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/visualdiary/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Visual Diary</title>
-    <link rel="stylesheet" href="./assets/${CSS}" />
+    <link rel="stylesheet" href="/visualdiary/assets/${CSS}" />
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="./assets/${JS}"></script>
+    <script type="module" src="/visualdiary/assets/${JS}"></script>
   </body>
 </html>
 EOF
