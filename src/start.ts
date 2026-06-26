@@ -18,8 +18,5 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
 });
 
 export const startInstance = createStart(() => ({
-  spa: {
-    enabled: true,
-  },
   requestMiddleware: [errorMiddleware],
 }));
