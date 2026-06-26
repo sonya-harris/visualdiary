@@ -1,0 +1,1 @@
+import{t as e}from"./site-layout-C-R3rSgm.js";import{l as t}from"./index-CsYdX0ib.js";var n=t(),r=({error:t})=>(0,n.jsx)(e,{children:(0,n.jsx)(`div`,{className:`px-6 py-20 text-center text-sm text-muted-foreground`,children:t.message})});export{r as errorComponent};
