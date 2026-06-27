@@ -25,18 +25,15 @@ export type Artwork = {
 function createArtwork(
   props: Partial<Artwork> & Pick<Artwork, "slug" | "title" | "featuredImage">,
 ): Artwork {
-  const resolvedTags = props.tags?.length ? props.tags : props.medium ? [props.medium] : [];
-  const resolvedMedium = props.medium || resolvedTags.join(", ");
-
   return {
+    medium: "",
     category: "",
     year: "",
     dimensions: "",
     description: "",
+    tags: [],
     gallery: [props.featuredImage],
     ...props,
-    medium: resolvedMedium,
-    tags: resolvedTags,
   };
 }
 
@@ -94,63 +91,64 @@ function resolveAsset(...assetNames: string[]) {
 }
 
 const mediumBySlug: Record<string, { medium: string; tags: string[] }> = {
-  "sunflower-theory": { medium: "Colour pencil", tags: ["Colour pencil"] },
-  lineage: { medium: "Colour pencil", tags: ["Colour pencil"] },
-  "egoic-lotus": { medium: "Colour pencil", tags: ["Colour pencil"] },
-serotonin: { medium: "Colour pencil", tags: ["Colour pencil"] },
-   jigsaw: {
-    medium: "Colour pencil / Graphite pencil / Watercolour paint / Fineliner",
-    tags: ["Watercolour paint", "Colour pencil", "Graphite pencil", "Fineliner"],},
-    harleycat: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
-   conch: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
-   "champs-elysees": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
-  "fka-twigs": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  "in-flux": { medium: "Stoneware clay", tags: ["Stoneware clay"] },
+  depth: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
   "the-grand-budapest-hotel": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
   "sezane-cups": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
-  "limoges-porcelain": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
-  "abbey-road": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
-  "in-flux": { medium: "Stoneware clay", tags: ["Stoneware clay"] },
-  sheer: { medium: "Cyanotype", tags: ["Cyanotype"] },
-  bougainvillea: { medium: "Cyanotype", tags: ["Cyanotype"] },
-  "brown-snake": { medium: "Cyanotype", tags: ["Cyanotype"] },
+  "champs-elysees": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
   embrace: { medium: "Photogram", tags: ["Photogram"] },
   crown: { medium: "Photogram", tags: ["Photogram"] },
+  "brown-snake": { medium: "Cyanotype", tags: ["Cyanotype"] },
+  sheer: { medium: "Cyanotype", tags: ["Cyanotype"] },
+  bougainvillia: { medium: "Cyanotype", tags: ["Cyanotype"] },
+  "bougainvillea": { medium: "Cyanotype", tags: ["Cyanotype"] },
+  "limoges-porcelain": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  jigsaw: {
+    medium: "Watercolour paint / Colour pencil / Graphite pencil / Fineliner",
+    tags: ["Watercolour paint", "Colour pencil", "Graphite pencil", "Fineliner"],
+  },
+  conch: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  "abbey-road": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
   boxes: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  harleycat: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  "fka-twigs": { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  "egoic-lotus": { medium: "Colour pencil", tags: ["Colour pencil"] },
   calendar: { medium: "Colour pencil", tags: ["Colour pencil"] },
-grid: { medium: "Graphite pencil", tags: ["Graphite pencil"] },
+  serotonin: { medium: "Colour pencil", tags: ["Colour pencil"] },
+  "sunflower-theory": { medium: "Colour pencil", tags: ["Colour pencil"] },
+  lineage: { medium: "Colour pencil", tags: ["Colour pencil"] },
 };
 
 function getArtworkMeta(slug: string) {
   return mediumBySlug[slug] ?? { medium: "", tags: [] };
 }
 
-const homepageOrder = ["sunflower-theory", "lineage", "egoic-lotus", "serotonin", "jigsaw", "harleycat", "conch", "champs-elysees", "fka-twigs", "the-grand-budapest-hotel", "sezane-cups", "limoges-porcelain", "abbey-road", "in-flux", "sheer", "bougainvillea", "brown-snake", "embrace", "crown", "boxes", "calendar", "depth"];
-
 const groupedArtworkConfigs = [
-  
+  {
+    slug: "bougainvillea",
+    title: "Bougainvillea",
+    assets: ["Bougainvillia.jpg"],
+  },
   {
     slug: "in-flux",
     title: "In Flux",
     assets: ["In Flux A.PNG", "In Flux B.jpg"],
-    description: "Replace this description with your own text for In Flux.",
   },
   {
     slug: "jigsaw",
     title: "Jigsaw",
     assets: [
       "Jigsaw_Colour pencil.jpg",
-      "Jigsaw_Graphite.jpg",
       "Jigsaw_Fineliner.jpg",
-      "Jigsaw_Watercolour.jpg",
+      "Jigsaw_Graphite.jpg",
       "Jigsaw_Outline.jpg",
+      "Jigsaw_Watercolour.jpg",
     ],
-    description: "Replace this description with your own text for Jigsaw.",
   },
   {
     slug: "sunflower-theory",
     title: "Sunflower Theory",
     assets: ["Sunflower Theory.jpg"],
-    description: "Replace this description with your own text for Sunflower Theory.",
   },
 ];
 
@@ -158,6 +156,8 @@ const singleArtworkConfigs = Object.keys(assetModules)
   .filter((assetPath) => {
     const fileName = (assetPath.split("/").pop() ?? "").toLowerCase();
     return ![
+      "signature-logo.svg",
+      "signature-logo.png",
       "sh.png",
       "sh.PNG",
       "sh-png",
@@ -174,7 +174,6 @@ const singleArtworkConfigs = Object.keys(assetModules)
     );
   });
 
-
 // To add a new artwork, drop the image into src/assets and it will appear automatically.
 export const artworks: Artwork[] = [
   ...groupedArtworkConfigs.map((config) => {
@@ -185,7 +184,6 @@ export const artworks: Artwork[] = [
       title: config.title,
       medium: meta.medium,
       tags: meta.tags,
-      description: config.description,
       featuredImage: images[0],
       gallery: images,
     });
@@ -202,21 +200,7 @@ export const artworks: Artwork[] = [
       gallery: [assetModules[assetPath]],
     });
   }),
-].sort((a, b) => {
-  const aIndex = homepageOrder.indexOf(a.slug);
-  const bIndex = homepageOrder.indexOf(b.slug);
-
-  if (aIndex === -1 && bIndex === -1) {
-    return a.title.localeCompare(b.title);
-  }
-  if (aIndex === -1) {
-    return 1;
-  }
-  if (bIndex === -1) {
-    return -1;
-  }
-  return aIndex - bIndex;
-});
+].sort((a, b) => a.title.localeCompare(b.title));
 
 export const getArtwork = (slug: string) =>
   artworks.find((a) => a.slug === slug);

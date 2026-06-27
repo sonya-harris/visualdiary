@@ -50,22 +50,22 @@ function ProjectPage() {
 
   return (
     <SiteLayout>
-      <article className="mt-6 px-4 sm:px-6 lg:px-7">
+      <article className="px-4 sm:px-6 lg:px-7">
         <div className="mx-auto grid max-w-[1400px] gap-12 pt-6 sm:pt-8 md:grid-cols-[280px_minmax(0,1fr)] md:gap-16 lg:grid-cols-[320px_minmax(0,1fr)]">
           {/* Meta column */}
           <aside className="md:sticky md:top-10 md:self-start">
-            <h1 className="font-display text-[36px] font-bold leading-[1] tracking-[-0.055em] text-black sm:text-[36px]">
+            <h1 className="font-display text-[28px] font-bold leading-[1] tracking-[-0.055em] text-black sm:text-[30px]">
               {artwork.title}
             </h1>
             <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2">
               {artwork.category ? (
-                <p className="text-[11px] font-bold leading-[1.2]  font-normal leading-[1.2] inline-flex items-center bg-[#F2F2F2] font-bold text-[10px] text-[#7F7F7F] tracking-[-0.03em] px-1 py-0.5 inline-block">
+                <p className="inline-block rounded-full border border-[#ececec] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.02em] text-[#777777]">
                   {artwork.category}
                 </p>
               ) : null}
-              {artwork.tags?.length || artwork.medium ? (
-                <span className="text-[11px] font-bold leading-[1.2] inline-flex items-center bg-[#F2F2F2] font-bold text-[10px] text-[#7F7F7F] tracking-[-0.03em] px-1 py-0.5 inline-block">
-                  {artwork.tags?.join(", ") || artwork.medium}
+              {artwork.medium || artwork.tags?.length ? (
+                <span className="text-[10px] font-normal leading-[1.2] text-[#777777]">
+                  {artwork.medium || artwork.tags?.join(", ")}
                 </span>
               ) : null}
             </div>
@@ -78,7 +78,7 @@ function ProjectPage() {
 
             <Link
               to="/"
-              className="mt-10 inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[-0.03em] text-black transition-colors hover:text-[#777777]"
+              className="mt-10 inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.02em] text-black transition-colors hover:text-[#777777]"
             >
               <span aria-hidden>←</span> Back
             </Link>
